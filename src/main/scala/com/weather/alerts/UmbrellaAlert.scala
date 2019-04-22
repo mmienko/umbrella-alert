@@ -30,7 +30,7 @@ class UmbrellaAlert extends ForecastService {
   }
 
   private def willLikelyRain(forecast: TodaysForecast): Boolean = forecast
-      .hasChanceOfPrecipitation(Configs.DAILY_PRECIPITATION_PROB, Configs.HOURLY_PRECIPITATION_PROB, Configs.LOOK_AHEAD_HOURS)
+    .hasChanceOfPrecipitation(Configs.DAILY_PRECIPITATION_PROB, Configs.HOURLY_PRECIPITATION_PROB, Configs.LOOK_AHEAD_HOURS)
 
   private def createMessage(forecast: TodaysForecast): String = {
     s"""
