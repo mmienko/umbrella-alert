@@ -44,7 +44,7 @@ class TodaysForecastSpec extends BaseSpec {
 
     it("should give hourly summary") {
       forecast.hourlySummary shouldEqual List(
-        " - 02:00 pm Overcast, 63.59˚F feels like 63.94˚F, 32% chance of rain",
+        " - 02:00 pm Overcast     , 63.59˚F feels like 63.94˚F, 32% chance of rain",
         " - 09:00 pm Mostly Cloudy, 56.83˚F feels like 56.83˚F, 2% chance of rain"
       ).mkString("\n")
     }

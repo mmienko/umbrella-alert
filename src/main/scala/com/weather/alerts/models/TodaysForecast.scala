@@ -20,15 +20,26 @@ final case class TodaysForecast(
 
   lazy val todaysSummary: String =
     s"""
-       |${today.map(sum).show}
+       |${today.map(sum(_)).show}
        |${today.map(precipitationProb).show}
     """.stripMargin.trim
 
-  lazy val hourlySummary: String = hourly
-    .map(hour => s" - ${hourOf(hour.dateTime(zonedId))} ${sum(hour)}, ${temp(hour)}, ${precipitationProb(hour)}")
-    .mkString("\n")
+  lazy val hourlySummary: String = {
+    val estimatedSumWidth = hourly.map(sum(_)).map(_.length).max
+    hourly
+      .map(h => s" - ${hourOf(h.dateTime(zonedId))} ${sum(h, Some(estimatedSumWidth))}, ${temp(h)}, ${precipitationProb(h)}")
+      .mkString("\n")
+  }
 
-  private def sum(dp: DataPoint) = dp.summary.show
+  private def sum(dp: DataPoint, widthOpt: Option[Int] = None): String = {
+    val res = dp.summary.show
+    widthOpt match {
+      case Some(width) =>
+        res.padTo(width, " ").mkString("")
+      case None =>
+        res
+    }
+  }
 
   private def temp(dp: DataPoint) = s"${dp.temperature.show}˚F feels like ${dp.apparentTemperature.show}˚F"
 
