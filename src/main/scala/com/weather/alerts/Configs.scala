@@ -1,7 +1,5 @@
 package com.weather.alerts
 
-import java.util.TimeZone
-
 import com.amazonaws.regions.Regions
 import com.weather.alerts.core.ForecastServiceConfig
 
@@ -14,7 +12,6 @@ object Configs extends ForecastServiceConfig {
   private val KEY_LOOK_AHEAD_HOURS = "LOOK_AHEAD_HOURS"
   private val KEY_HOURLY_PRECIPITATION_PROB = "HOURLY_PRECIPITATION_PROB"
   private val KEY_DAILY_PRECIPITATION_PROB = "DAILY_PRECIPITATION_PROB"
-  private val KEY_TIME_ZONE = "TIME_ZONE"
 
   lazy val LOOK_AHEAD_HOURS: Int = {
     val x = getOrThrow(KEY_LOOK_AHEAD_HOURS)
@@ -54,8 +51,6 @@ object Configs extends ForecastServiceConfig {
       throw new IllegalArgumentException(s"$KEY_DAILY_PRECIPITATION_PROB should be an double between 0 and 1")
     x.toDouble
   }
-
-  lazy val TIME_ZONE: TimeZone = TimeZone.getTimeZone(getOrThrow(KEY_TIME_ZONE))
 
   lazy val SNS_ARN: String = getOrThrow(KEY_SNS_ARN)
 

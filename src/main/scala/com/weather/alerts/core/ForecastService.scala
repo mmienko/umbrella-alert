@@ -24,7 +24,7 @@ trait ForecastService extends RequestHandler[ScheduledEvent, Void] {
       .flatMap(response => decode[Forecast](response) match {
         case Left(error) => Left(new Exception(error))
         case r => r
-      })  //todo: check tz?
+      })
 
     handleForecast(res, isTestEvent(event), c)
     null

@@ -14,7 +14,7 @@ class ForecastSpec extends BaseSpec {
       val today = forecast.getTodays(Fixtures.forecastDate)
 
       Fixtures.timeToLocalDate(today.current.time) shouldEqual Fixtures.forecastDate
-      Fixtures.timeToLocalDate(today.today.time) shouldEqual Fixtures.forecastDate
+      Fixtures.timeToLocalDate(today.today.get.time) shouldEqual Fixtures.forecastDate
       today.hourly.size should be > 0
       today.hourly.foreach(hour => {
         Fixtures.timeToLocalDate(hour.time) shouldEqual Fixtures.forecastDate

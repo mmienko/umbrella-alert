@@ -22,7 +22,7 @@ class TodaysForecastSpec extends BaseSpec {
 //    DataPoint(1555819200, Some("Mostly Cloudy"), Some("partly - cloudy - night"), None, None, Some(0.0015), None, Some(0.02), None, Some("rain"), Some(55.25), Some(55.25))
   )
 
-  private val forecast = TodaysForecast(current, day, hourly, ZoneId.of("America/New_York"))
+  private val forecast = TodaysForecast(current, Some(day), hourly, ZoneId.of("America/New_York"))
 
   describe("Forecast") {
     it("should give current summary") {

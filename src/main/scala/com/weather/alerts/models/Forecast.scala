@@ -41,7 +41,7 @@ case class Forecast(
       .plusDays(1)
       .atStartOfDay(tz.toZoneId)
 
-    val day = daily.data.filter(_.dateTime(tz.toZoneId).isBefore(midnight)).head //todo: safe to assume?
+    val day = daily.data.find(_.dateTime(tz.toZoneId).isBefore(midnight))
     val hours = hourly.data.filter(_.dateTime(tz.toZoneId).isBefore(midnight)).sortBy(_.time)
     TodaysForecast(currently, day, hours, tz.toZoneId)
   }

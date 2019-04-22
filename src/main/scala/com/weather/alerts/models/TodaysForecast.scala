@@ -1,11 +1,10 @@
 package com.weather.alerts.models
 
-import java.time.{Instant, ZonedDateTime, ZoneId}
-import java.util.TimeZone
+import java.time.{ZonedDateTime, ZoneId}
 
 final case class TodaysForecast(
   current: DataPoint,
-  today: DataPoint,
+  today: Option[DataPoint],
   hourly: Iterable[DataPoint],
   zonedId: ZoneId
 ) {
@@ -21,8 +20,8 @@ final case class TodaysForecast(
 
   lazy val todaysSummary: String =
     s"""
-       |${sum(today)}
-       |${precipitationProb(today)}
+       |${today.map(sum).show}
+       |${today.map(precipitationProb).show}
     """.stripMargin.trim
 
   lazy val hourlySummary: String = hourly
@@ -60,19 +59,27 @@ final case class TodaysForecast(
   /**
     * Checks if chance of precipitation for the day or a given hour is above the given probability.
     *
-    * @param dailyPrecipitationProd - probability during whole day
+    * @param dailyPrecipitationProd  - probability during whole day
     * @param hourlyPrecipitationProd - probability during any hour
-    * @param nextHours - number of hours to look ahead for the day
+    * @param nextHours               - number of hours to look ahead for the day
     * @return
     */
   def hasChanceOfPrecipitation(dailyPrecipitationProd: Double, hourlyPrecipitationProd: Double, nextHours: Int): Boolean = {
-    //day
-    today.precipProbability
-      .exists(_ >= dailyPrecipitationProd) ||
-    //hour
-      hourly.take(nextHours)
-        .flatMap(_.precipProbability)
-        .exists(_ >= hourlyPrecipitationProd)
+    hasChanceOfRainOverTheDay(dailyPrecipitationProd) ||
+      hasChanceOfRainInAnHour(hourlyPrecipitationProd, nextHours)
+  }
+
+  private def hasChanceOfRainOverTheDay(precipitationProd: Double): Boolean = {
+    today.isDefined &&
+      (today.flatMap(_.precipType).exists(PRECIPITATION_TYPES.contains) ||
+        today.flatMap(_.precipProbability).exists(_ >= precipitationProd))
+  }
+
+  private def hasChanceOfRainInAnHour(precipitationProd: Double, nextHours: Int) = {
+    val hours = hourly.take(nextHours)
+      .filter(_.precipType.exists(PRECIPITATION_TYPES.contains))
+    hours.nonEmpty &&
+      hours.flatMap(_.precipProbability).exists(_ >= precipitationProd)
   }
 
 }
