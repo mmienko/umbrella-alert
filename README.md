@@ -14,7 +14,7 @@ precipitation (bring an umbrella!).
     - Upload env var, see `Configs` & `ForecastServiceConfig`
     
 ## Deploy
-`sbt clean assebly` then upload jar to lambda
+`sbt clean assembly` then upload jar to lambda
 
 ## Testing Lambda
 1) Go to Lambda

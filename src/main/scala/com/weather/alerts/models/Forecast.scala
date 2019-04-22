@@ -1,4 +1,7 @@
-package com.weather.alerts
+package com.weather.alerts.models
+
+import java.time.{Instant, LocalDate, ZonedDateTime, ZoneId}
+import java.util.TimeZone
 
 case class DataPoint(
   time: Long,
@@ -13,7 +16,9 @@ case class DataPoint(
   precipType: Option[String],
   temperature: Option[Double],
   apparentTemperature: Option[Double],
-)
+) {
+  def dateTime(zoneId: ZoneId): ZonedDateTime = Instant.ofEpochSecond(time).atZone(zoneId)
+}
 
 case class DataBlock(
   summary: String,
@@ -21,11 +26,24 @@ case class DataBlock(
   data: List[DataPoint]
 )
 
-case class ForecastResponse(
+case class Forecast(
   latitude: Double,
   longitude: Double,
   timezone: String,
   currently: DataPoint,
   hourly: DataBlock,
   daily: DataBlock
-)
+) {
+
+  def getTodays(todaysDate: LocalDate = LocalDate.now): TodaysForecast = {
+    val tz = TimeZone.getTimeZone(timezone)
+    val midnight = todaysDate
+      .plusDays(1)
+      .atStartOfDay(tz.toZoneId)
+
+    val day = daily.data.find(_.dateTime(tz.toZoneId).isBefore(midnight))
+    val hours = hourly.data.filter(_.dateTime(tz.toZoneId).isBefore(midnight)).sortBy(_.time)
+    TodaysForecast(currently, day, hours, tz.toZoneId)
+  }
+
+}
