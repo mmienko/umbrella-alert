@@ -10,11 +10,14 @@ retrieveManaged := true
 
 //Deps
 val circeVersion = "0.10.0"
+val awsLambdaCoreVersion = "1.2.0"
+val awsLambdaEventsVersion = "2.2.5"
+val awsSnsVersion = "1.11.500"
 
-libraryDependencies += "com.amazonaws" % "aws-lambda-java-core" % "1.2.0"
-libraryDependencies += "com.amazonaws" % "aws-lambda-java-events" % "2.2.5"
+libraryDependencies += "com.amazonaws" % "aws-lambda-java-core" % awsLambdaCoreVersion
+libraryDependencies += "com.amazonaws" % "aws-lambda-java-events" % awsLambdaEventsVersion
 libraryDependencies += "com.softwaremill.sttp" %% "core" % "1.5.9"
-libraryDependencies += "com.amazonaws" % "aws-java-sdk-sns" % "1.11.500"
+libraryDependencies += "com.amazonaws" % "aws-java-sdk-sns" % awsSnsVersion
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test
 libraryDependencies += "org.scalamock" %% "scalamock" % "4.1.0" % Test
 libraryDependencies ++= Seq(
@@ -29,5 +32,5 @@ fork in Test := true
 test in assembly := {} //skip tests on assembly
 assemblyMergeStrategy in assembly := {
   case PathList("META-INF", xs@_*) => MergeStrategy.discard
-  case x => MergeStrategy.first
+  case _ => MergeStrategy.first
 }

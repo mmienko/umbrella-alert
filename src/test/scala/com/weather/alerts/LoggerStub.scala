@@ -1,4 +1,4 @@
-package com.weather.alerts.models
+package com.weather.alerts
 
 import com.amazonaws.services.lambda.runtime.LambdaLogger
 
